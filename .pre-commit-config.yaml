@@ -1,0 +1,8 @@
+repos:
+-   repo: local
+    hooks:
+    - id: missing-buf
+      name: buf tool is installed
+      entry: .scripts/pre-commit/buf-missing.sh
+      language: script
+      verbose: true

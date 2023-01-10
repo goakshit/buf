@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package payment.v1;
+
+// PaymentType represents the different types of payments.
+enum PaymentType {
+  PAYMENT_TYPE_UNSPECIFIED = 0;
+  PAYMENT_TYPE_ON_DEMAND = 1;
+  PAYMENT_TYPE_HOURLY = 2;
+  PAYMENT_TYPE_DAILY = 3;
+  PAYMENT_TYPE_MONTHLY = 4;
+}
+
+message Payment {
+  PaymentType payment_type = 1;
+  string payment_id = 2;
+  string name = 3;
+}
+
+message GetPaymentRequest {
+  string payment_id = 1;
+}
+
+message GetPaymentResponse {
+  Payment payment = 1;
+}
+
+message PutPaymentRequest {
+  PaymentType payment_type = 1;
+  string name = 2;
+}
+
+message PutPaymentResponse {
+  Payment payment = 1;
+}
+
+message DeletePaymentRequest {
+  string paymentID = 1;
+}
+
+message DeletePaymentResponse {}
+
+service PaymentStore {
+  rpc GetPayment(GetPaymentRequest) returns (GetPaymentResponse) {}
+  rpc PutPayment(PutPaymentRequest) returns (PutPaymentResponse) {}
+  rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse) {}
+}

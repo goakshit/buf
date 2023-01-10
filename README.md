@@ -1,2 +1,5 @@
 #### Overview
-Sample project to test buf!
+Sample project to buf!
+
+<!--  -->
+Before contributing to the project, ensure you have pre-commit & buf installed
