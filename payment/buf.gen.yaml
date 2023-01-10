@@ -1,0 +1,16 @@
+version: v1
+managed:
+  enabled: true
+  optimize_for: CODE_SIZE
+
+  go_package_prefix:
+    default: github.com/goakshit/buf
+    # except:
+    #   - buf.build/googleapis/googleapis
+plugins:
+  - plugin: buf.build/protocolbuffers/go:v1.28.1
+    out: gen/go
+    opt: paths=source_relative
+  - plugin: buf.build/protocolbuffers/ruby:v21.10
+    out: gen/ruby
+    opt: paths=source_relative

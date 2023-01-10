@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package report.v1;
+
+// ReportType represents the different types of reports.
+enum ReportType {
+  REPORT_TYPE_UNSPECIFIED = 0;
+  REPORT_TYPE_ON_DEMAND = 1;
+  REPORT_TYPE_HOURLY = 2;
+  REPORT_TYPE_DAILY = 3;
+  REPORT_TYPE_MONTHLY = 4;
+}
+
+message Report {
+  ReportType report_type = 1;
+  string report_id = 2;
+  string name = 3;
+}
+
+message GetReportRequest {
+  string report_id = 1;
+}
+
+message GetReportResponse {
+  Report report = 1;
+}
+
+message PutReportRequest {
+  ReportType report_type = 1;
+  string name = 2;
+}
+
+message PutReportResponse {
+  Report report = 1;
+}
+
+message DeleteReportRequest {
+  string reportID = 1;
+}
+
+message DeleteReportResponse {}
+
+service ReportStore {
+  rpc GetReport(GetReportRequest) returns (GetReportResponse) {}
+  rpc PutReport(PutReportRequest) returns (PutReportResponse) {}
+  rpc DeleteReport(DeleteReportRequest) returns (DeleteReportResponse) {}
+}
