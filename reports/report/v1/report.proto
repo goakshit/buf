@@ -38,6 +38,10 @@ message DeleteReportRequest {
   string reportID = 1;
 }
 
+message MergeReportRequest {
+  string reportID = 1;
+}
+
 message DeleteReportResponse {}
 
 service ReportStore {
