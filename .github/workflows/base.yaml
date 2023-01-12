@@ -1,0 +1,47 @@
+name: build protobuf schemas
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout to release branch
+      - uses: actions/checkout@v3
+        with:
+          ref: 'main'
+          token: ${{ secrets.GIT_TOKEN }}
+      
+      - name: configure the git user
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: ready the branch
+        run: |
+          git fetch origin release
+          git checkout origin/release
+          git merge --squash origin/main --allow-unrelated-histories
+          
+      # Runs commands using the runners shell
+      # This step will call buf generate 
+      - name: generate buf file
+        run: |
+          mkdir -p gen
+          touch gen/test2.tf
+
+      - name: Commit generated files
+        run: |
+          echo ${{ github.event.head_commit.message }}
+          git reset
+          git add -f gen/
+          git commit -m "[bot] Generated files" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          
+      - name: Push generated files to release
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GIT_TOKEN }}
+          branch: release
+          force: true
