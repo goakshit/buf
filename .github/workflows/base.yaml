@@ -1,38 +1,38 @@
-name: Build Proto files
+# name: Build Proto files
 
-on:
-  push:
-    branches: ["main"]
+# on:
+#   push:
+#     branches: ["main"]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-          token: ${{ secrets.GIT_TOKEN }}
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#       - uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 1
+#           token: ${{ secrets.GIT_TOKEN }}
 
-      # Runs commands using the runners shell
-      - name: generate file
-        run: |
-          mkdir gen
-          touch gen/test.tf
-          echo "test" > gen/test.tf
+#       # Runs commands using the runners shell
+#       - name: generate file
+#         run: |
+#           mkdir gen
+#           touch gen/test.tf
+#           echo "test" > gen/test.tf
 
-      - name: Commit files # transfer the new html files back into the repository
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add -f gen/
-          git commit -m "[bot] generated files" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-      - name: Push changes # push the output folder to your repo
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GIT_TOKEN }}
-          branch: release
-          force: true
+#       - name: Commit files # transfer the new html files back into the repository
+#         run: |
+#           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+#           git config --local user.name "github-actions[bot]"
+#           git add -f gen/
+#           git commit -m "[bot] generated files" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+#       - name: Push changes # push the output folder to your repo
+#         uses: ad-m/github-push-action@master
+#         with:
+#           github_token: ${{ secrets.GIT_TOKEN }}
+#           branch: main
+#           force: true
 
       # - uses: stefanzweifel/git-auto-commit-action@v4
       #   with:
