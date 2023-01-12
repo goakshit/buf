@@ -23,7 +23,7 @@ jobs:
       # This step will call buf generate 
       - name: generate buf file
         run: |
-          git merge --squash main --allow-unrelated-histories
+          git merge --squash origin/main --allow-unrelated-histories
           mkdir gen
           touch gen/test.tf
 
