@@ -18,12 +18,12 @@ jobs:
         run: |
           git fetch origin main --depth 1
           git checkout origin/main
+          git merge --squash origin/main --allow-unrelated-histories
 
       # Runs commands using the runners shell
       # This step will call buf generate 
       - name: generate buf file
         run: |
-          git merge --squash origin/main --allow-unrelated-histories
           mkdir gen
           touch gen/test.tf
 
@@ -33,14 +33,14 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -f gen/
-          git commit -m "[bot] generated files" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          git commit -m "[bot] Generated files" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
           
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GIT_TOKEN }}
           branch: release
-          force: false
+          force: true
 
       # - uses: stefanzweifel/git-auto-commit-action@v4
       #   with:
