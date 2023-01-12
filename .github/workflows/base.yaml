@@ -16,22 +16,21 @@ jobs:
       
       - name: ready the branch
         run: |
-          git fetch origin main --depth 1
+          git fetch origin main
           git checkout origin/main
-          git merge --squash origin/main --allow-unrelated-histories
+          
 
       # Runs commands using the runners shell
       # This step will call buf generate 
       - name: generate buf file
         run: |
+          echo $(git branch)
+          git merge --squash origin/main --allow-unrelated-histories
           mkdir gen
           touch gen/test.tf
 
       - name: Commit files
         run: |
-          echo $(git branch)
-          echo $(ls -a)
-          echo $(git log)
           git reset
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
