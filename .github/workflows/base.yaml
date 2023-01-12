@@ -28,7 +28,7 @@ jobs:
         run: |
           git branch
           git merge --squash origin/main --allow-unrelated-histories
-          mkdir gen
+          mkdir -p gen
           touch gen/test.tf
 
       - name: Commit files
