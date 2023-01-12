@@ -29,7 +29,7 @@ jobs:
           git branch
           git merge --squash origin/main --allow-unrelated-histories
           mkdir -p gen
-          touch gen/test.tf
+          touch gen/test1.tf
 
       - name: Commit files
         run: |
