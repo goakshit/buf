@@ -11,20 +11,20 @@ jobs:
       # Checkout to release branch
       - uses: actions/checkout@v3
         with:
-          ref: 'release'
+          ref: 'main'
           token: ${{ secrets.GIT_TOKEN }}
       
       - name: ready the branch
         run: |
-          git fetch origin main
-          git checkout origin/main
+          git fetch origin release
+          git checkout origin/release
           
 
       # Runs commands using the runners shell
       # This step will call buf generate 
       - name: generate buf file
         run: |
-          echo $(git branch)
+          git branch
           git merge --squash origin/main --allow-unrelated-histories
           mkdir gen
           touch gen/test.tf
