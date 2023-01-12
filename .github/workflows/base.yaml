@@ -30,7 +30,7 @@ jobs:
       - name: generate buf file
         run: |
           mkdir -p gen
-          touch gen/test4.tf
+          touch gen/test5.tf
 
       - name: Commit generated files
         run: |
