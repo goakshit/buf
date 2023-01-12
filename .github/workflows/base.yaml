@@ -18,12 +18,12 @@ jobs:
         run: |
           git fetch origin main --depth 1
           git checkout origin/main
-          git merge --squash main --allow-unrelated-histories
 
       # Runs commands using the runners shell
       # This step will call buf generate 
       - name: generate buf file
         run: |
+          git merge --squash main --allow-unrelated-histories
           mkdir gen
           touch gen/test.tf
 
