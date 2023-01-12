@@ -18,6 +18,7 @@ jobs:
       - name: generate file
         run: |
           mkdir gen
+          touch gen/test.tf
           cat "test" > gen/test.tf
 
       - name: Commit files # transfer the new html files back into the repository
