@@ -14,88 +14,33 @@ jobs:
           ref: 'main'
           token: ${{ secrets.GIT_TOKEN }}
       
-      - name: ready the branch
+      - name: configure the git user
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+
+      - name: ready the branch
+        run: |
           git fetch origin release
           git checkout origin/release
+          git merge --squash origin/main --allow-unrelated-histories
           
-
       # Runs commands using the runners shell
       # This step will call buf generate 
       - name: generate buf file
         run: |
-          git branch
-          git merge --squash origin/main --allow-unrelated-histories
           mkdir -p gen
-          touch gen/test1.tf
+          rm gen/test1.tf
 
-      - name: Commit files
+      - name: Commit generated files
         run: |
           git reset
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
           git add -f gen/
           git commit -m "[bot] Generated files" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
           
-      - name: Push changes
+      - name: Push generated files to release
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GIT_TOKEN }}
           branch: release
           force: true
-
-      # - uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: '[Automated] Generating files'
-      #     branch: 'release'
-
-
-      #     # Optional. Options used by `git-commit`.
-      #     # See https://git-scm.com/docs/git-commit#_options
-      #     commit_options: '--no-verify --signoff'
-
-      #     # Optional glob pattern of files which should be added to the commit
-      #     # Defaults to all (.)
-      #     # See the `pathspec`-documentation for git
-      #     # - https://git-scm.com/docs/git-add#Documentation/git-add.txt-ltpathspecgt82308203
-      #     # - https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
-      #     file_pattern: 'gen'
-
-      #     # Optional commit user and author settings
-      #     # commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
-      #     commit_user_email: 'github-actions[bot]@users.noreply.github.com' # defaults to "41898282+github-actions[bot]@users.noreply.github.com"
-      #     commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>' # defaults to author of the commit that triggered the run
-
-      #     # Optional. Tag name being created in the local repository and 
-      #     # pushed to remote repository and defined branch.
-      #     # tagging_message: 'v1.0.0'
-
-      #     # Optional. Option used by `git-status` to determine if the repository is 
-      #     # dirty. See https://git-scm.com/docs/git-status#_options
-      #     status_options: '--untracked-files=no'
-
-      #     # Optional. Options used by `git-add`.
-      #     # See https://git-scm.com/docs/git-add#_options
-      #     add_options: '-f'
-
-      #     # Optional. Options used by `git-push`.
-      #     # See https://git-scm.com/docs/git-push#_options
-      #     push_options: '--force'
-          
-      #     # Optional. Disable dirty check and always try to create a commit and push
-      #     skip_dirty_check: true    
-          
-      #     # Optional. Skip internal call to `git fetch`
-      #     skip_fetch: false    
-          
-      #     # Optional. Skip internal call to `git checkout`
-      #     skip_checkout: false
-
-      #     # Optional. Prevents the shell from expanding filenames. 
-      #     # Details: https://www.gnu.org/software/bash/manual/html_node/Filename-Expansion.html
-      #     disable_globbing: true
-
-      #     # Optional. Create given branch name in local and remote repository.
-      #     create_branch: true
