@@ -8,14 +8,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checkout to release branch
       - uses: actions/checkout@v3
         with:
           ref: 'release'
           token: ${{ secrets.GIT_TOKEN }}
-
+      
       - name: ready the branch
         run: |
+          git fetch origin main --depth 1
+          git checkout origin/main
           git merge --squash main --allow-unrelated-histories
 
       # Runs commands using the runners shell
