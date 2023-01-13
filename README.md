@@ -11,9 +11,7 @@ git commit --allow-empty -m "initial commit"
 git push origin release
 ```
 
-- Auto tagging every release [Understand naming commit message]
-> Setup another github workflow that bumps the tag version on the release branch.
-> To bump the version, commit message should be formulated properly. It follows (Angular convention)[https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format]
+- Auto tagging every release. Defaults to: #major, #minor & #patch
 
 #### Missing
 - Use existing buf actions for linting, breaking change ... and so on.

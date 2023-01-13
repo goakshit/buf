@@ -23,4 +23,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
           WITH_V: true
           DEFAULT_BUMP: 'none'
-          
