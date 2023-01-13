@@ -1,4 +1,4 @@
-name: bump version
+name: bump-version
 on:
   workflow_run:
     workflows: [build-protobuf-schemas]
@@ -9,6 +9,7 @@ on:
 
 jobs:
   bump_version:
+    name: tag-release
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
