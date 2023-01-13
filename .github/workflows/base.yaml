@@ -1,16 +1,14 @@
 name: build-protobuf-schemas
 
 on:
-  pull_request:
-    branches: 
-      - main
-    types: ['closed']
+  push:
+    branches:
+      - "main"
 
 jobs:
   build:
-    name: build-protobuf-schemas
+    name: build-protobufs
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged }}
     steps:
       # Checkout to release branch
       - uses: actions/checkout@v3
@@ -34,7 +32,7 @@ jobs:
       - name: generate buf file
         run: |
           mkdir -p gen
-          touch gen/test9.tf
+          touch gen/test10.tf
 
       - name: Commit generated files
         run: |
