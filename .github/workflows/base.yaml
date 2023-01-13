@@ -1,17 +1,15 @@
 name: build-protobuf-schemas
 
 on:
-  workflow_run:
-    workflows: [buf-lint]
-    types:
-      - completed
-  push:
-    branches: ["main"]
+  pull_request:
+    branches: 
+      - main
+    types: [closed]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.pull_request.merged }}
     steps:
       # Checkout to release branch
       - uses: actions/checkout@v3
@@ -35,7 +33,7 @@ jobs:
       - name: generate buf file
         run: |
           mkdir -p gen
-          touch gen/test6.tf
+          touch gen/test8.tf
 
       - name: Commit generated files
         run: |
