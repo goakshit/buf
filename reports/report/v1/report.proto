@@ -35,16 +35,16 @@ message PutReportResponse {
 }
 
 message DeleteReportRequest {
-  string report_id = 1;
+  string reportID = 1;
 }
 
 message MigrateReportRequest {
-  string report_id = 1;
+  string reportID = 1;
 }
 
 message DeleteReportResponse {}
 
-service ReportService {
+service ReportStore {
   rpc GetReport(GetReportRequest) returns (GetReportResponse) {}
   rpc PutReport(PutReportRequest) returns (PutReportResponse) {}
   rpc DeleteReport(DeleteReportRequest) returns (DeleteReportResponse) {}
