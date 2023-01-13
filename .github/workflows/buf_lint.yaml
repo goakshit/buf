@@ -7,13 +7,14 @@ on:
 
 jobs:
   build:
+    name: buf-lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: bufbuild/buf-setup-action@v1.12.0
         with:
           github_token: ${{ secrets.GIT_TOKEN }}
-      # - uses: bufbuild/buf-lint-action@v1
+      - uses: bufbuild/buf-lint-action@v1
       - uses: bufbuild/buf-breaking-action@v1
         with:
           against: "https://github.com/goakshit/buf.git#branch=main"
