@@ -1,12 +1,17 @@
-name: build protobuf schemas
+name: build-protobuf-schemas
 
 on:
+  workflow_run:
+    workflows: [buf-lint]
+    types:
+      - completed
   push:
     branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       # Checkout to release branch
       - uses: actions/checkout@v3
@@ -30,7 +35,7 @@ jobs:
       - name: generate buf file
         run: |
           mkdir -p gen
-          touch gen/test4.tf
+          touch gen/test5.tf
 
       - name: Commit generated files
         run: |
