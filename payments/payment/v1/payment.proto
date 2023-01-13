@@ -35,12 +35,12 @@ message PutPaymentResponse {
 }
 
 message DeletePaymentRequest {
-  string paymentID = 1;
+  string payment_id = 1;
 }
 
 message DeletePaymentResponse {}
 
-service PaymentStore {
+service PaymentService {
   rpc GetPayment(GetPaymentRequest) returns (GetPaymentResponse) {}
   rpc PutPayment(PutPaymentRequest) returns (PutPaymentResponse) {}
   rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse) {}
