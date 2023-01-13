@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: 
       - main
-    types: [closed]
+    types: ['closed']
 
 jobs:
   build:
@@ -33,10 +33,11 @@ jobs:
       - name: generate buf file
         run: |
           mkdir -p gen
-          touch gen/test8.tf
+          touch gen/test9.tf
 
       - name: Commit generated files
         run: |
+          echo ${{ github.event.head_commit.message }}
           git reset
           git add -f gen/
           git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
