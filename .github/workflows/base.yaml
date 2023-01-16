@@ -36,7 +36,6 @@ jobs:
 
       - name: Commit generated files
         run: |
-          echo ${{ github.event.head_commit.message }}
           git reset
           git add -f gen/
           git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
