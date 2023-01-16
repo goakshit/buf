@@ -13,7 +13,7 @@ jobs:
       image: bufbuild/buf:1.12.0
     steps:
       # Checkout to release branch
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with:
           ref: 'main'
           token: ${{ secrets.GIT_TOKEN }}
@@ -25,7 +25,6 @@ jobs:
 
       - name: ready the branch
         run: |
-          git config --global --add safe.directory /__w/buf/buf
           git fetch origin release
           git checkout origin/release
           git merge --squash origin/main --allow-unrelated-histories
@@ -35,18 +34,12 @@ jobs:
       - name: generate buf file
         run: |
           mkdir -p gen
-          touch gen/test15.tf
-
-      - name: Commit generated files
-        run: |
-          git reset
           git add -f gen/
           git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-          git push -v -u origin release --force
           
-      # - name: Push generated files to release
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GIT_TOKEN }}
-      #     branch: release
-      #     force: true
+      - name: Push generated files to release
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GIT_TOKEN }}
+          branch: release
+          force: true
