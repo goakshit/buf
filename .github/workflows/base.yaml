@@ -10,7 +10,7 @@ jobs:
     name: build-protobufs
     runs-on: ubuntu-latest
     container:
-      image: bufbuild/buf:1.12
+      image: bufbuild/buf:1.12.0
     steps:
       # Checkout to release branch
       - uses: actions/checkout@v3
