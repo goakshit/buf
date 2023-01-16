@@ -42,7 +42,7 @@ jobs:
           git reset
           git add -f gen/
           git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-          git push origin release --force
+          git push -v -u origin release --force
           
       # - name: Push generated files to release
       #   uses: ad-m/github-push-action@master
