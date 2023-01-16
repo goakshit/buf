@@ -16,6 +16,4 @@ git push origin release
   If none of the tags are present in commit message, new tags are ignored(defaults to minor tag; configurable).
 
 - Added Workflow for verifying buf linting, breaking change ... and so on.
-
-#### Missing
 - `buf generate` command to generate files.
