@@ -4,15 +4,14 @@ on:
   push:
     branches:
       - "main"
+    paths:
+      - '**.proto'
 
 jobs:
   build:
     name: build-protobufs
     runs-on: ubuntu-latest
-    # container:
-    #   image: bufbuild/buf:1.12.0
     steps:
-      # Checkout to release branch
       - uses: actions/checkout@v3
         with:
           ref: 'main'
@@ -29,8 +28,6 @@ jobs:
           git checkout origin/release
           git merge --squash origin/main --allow-unrelated-histories
           
-      # Runs commands using the runners shell
-      # This step will call buf generate 
       - name: generate buf file
         run: |
           BIN="/usr/local/bin" && \
@@ -41,7 +38,6 @@ jobs:
             chmod +x "${BIN}/buf"
 
           buf generate
-
           git reset
           git add -f gen/
           git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
