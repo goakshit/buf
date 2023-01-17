@@ -53,7 +53,7 @@ jobs:
       - name: Commit changes
         run: |
           git add -f .
-          git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          git commit -m "${{ git show -s --format=%s }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
           
       - name: Push generated files to release
         uses: ad-m/github-push-action@master
