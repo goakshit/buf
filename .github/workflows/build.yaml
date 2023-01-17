@@ -1,4 +1,4 @@
-name: build-protobuf-schemas
+name: build-protobuf
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: build-protobufs
+    name: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,10 +17,10 @@ jobs:
           ref: 'main'
           token: ${{ secrets.GIT_TOKEN }}
       
-      # - name: configure the git user
-      #   run: |
-      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      #     git config --global user.name "github-actions[bot]"
+      - name: configure the git user
+        run: |
+          git config --global user.email "buf[bot]@users.noreply.github.com"
+          git config --global user.name "buf[bot]"
 
       - name: ready the branch
         run: |
@@ -40,7 +40,7 @@ jobs:
           buf generate
           git reset
           git add -f gen/
-          git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          git commit -m "${{ github.event.head_commit.message }}" --author="buf[bot] <buf[bot]@users.noreply.github.com>"
           
       - name: Push generated files to release
         uses: ad-m/github-push-action@master
