@@ -41,6 +41,7 @@ message DeleteReportRequest {
 message MigrateReportRequest {
   string report_id = 1;
   string name = 2;
+  string address = 3;
 }
 
 message DeleteReportResponse {}
