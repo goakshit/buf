@@ -1,16 +1,17 @@
 name: build-protobuf
 
 on:
-  push:
+  pull_request:
+    types:
+      - "closed"
     branches:
       - "main"
-    paths:
-      - '**.proto'
 
 jobs:
   build:
     name: build
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -22,11 +23,11 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
-      - name: ready the branch
-        run: |
-          git fetch origin release
-          git checkout origin/release
-          git merge --squash origin/main --allow-unrelated-histories
+      # - name: ready the branch
+      #   run: |
+      #     git fetch origin release
+      #     git checkout origin/release
+      #     git merge --squash origin/main --allow-unrelated-histories
           
       - name: generate buf file
         run: |
@@ -36,15 +37,26 @@ jobs:
               "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
               -o "${BIN}/buf" && \
             chmod +x "${BIN}/buf"
-
           buf generate
-          git reset
-          git add -f gen/
+
+      # - name: build ruby package
+      #   run: |
+      #     apt-get install ruby ruby-dev
+      #     gem install bundler
+
+      # - name: build python package
+      #   run: |
+      #     create minimal directory structure and
+      #     upload the file zip to aws codeartifact.
+
+      - name: Commit changes
+        run: |
+          git add -f .
           git commit -m "${{ github.event.head_commit.message }}" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
           
       - name: Push generated files to release
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GIT_TOKEN }}
-          branch: release
+          branch: main
           force: true
