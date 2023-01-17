@@ -1,9 +1,5 @@
 name: bump-version
 on:
-  workflow_run:
-    workflows: [build-protobuf]
-    types:
-      - completed
   push:
     branches: ["release"]
 
