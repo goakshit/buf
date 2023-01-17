@@ -28,6 +28,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "report.v1.MigrateReportRequest" do
       optional :report_id, :string, 1, json_name: "reportId"
+      optional :name, :string, 2, json_name: "name"
+      optional :address, :string, 3, json_name: "address"
     end
     add_message "report.v1.DeleteReportResponse" do
     end
