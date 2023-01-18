@@ -19,4 +19,4 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GIT_TOKEN }}
-          default_bump: 'false'
+          custom_release_rules: 'feat:minor,enhancement:minor,fix:patch,hotfix:patch,breaking:major,perf:major'
