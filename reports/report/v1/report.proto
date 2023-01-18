@@ -52,6 +52,7 @@ message MigrateReportRequest {
   string latitude = 11;
   string long = 12;
   string longer = 13;
+  string longerer = 14;
 }
 
 message DeleteReportResponse {}
