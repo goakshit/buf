@@ -33,6 +33,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :city, :string, 4, json_name: "city"
       optional :country, :string, 5, json_name: "country"
       optional :pin, :string, 6, json_name: "pin"
+      optional :pin_code, :string, 7, json_name: "pinCode"
     end
     add_message "report.v1.DeleteReportResponse" do
     end
