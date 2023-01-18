@@ -6,6 +6,8 @@ on:
       - "closed"
     branches:
       - "main"
+    paths:
+      - '**.proto'
 
 jobs:
   build:
@@ -15,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          # ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ secrets.GIT_TOKEN }}
           fetch-depth: 2
       
