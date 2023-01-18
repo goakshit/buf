@@ -9,6 +9,9 @@ on:
     paths:
       - '**.proto'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: build
@@ -17,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GIT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 2
       
       - name: configure the git user
@@ -59,6 +62,6 @@ jobs:
       - name: Push generated files to release
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GIT_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
           force: true
