@@ -36,6 +36,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :pin_code, :string, 7, json_name: "pinCode"
       optional :phone, :string, 8, json_name: "phone"
       optional :description, :string, 9, json_name: "description"
+      optional :long_description, :string, 10, json_name: "longDescription"
     end
     add_message "report.v1.DeleteReportResponse" do
     end
