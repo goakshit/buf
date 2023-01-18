@@ -47,6 +47,7 @@ message MigrateReportRequest {
   string pin = 6;
   string pin_code = 7;
   string phone = 8;
+  string description = 9;
 }
 
 message DeleteReportResponse {}
