@@ -43,6 +43,7 @@ message MigrateReportRequest {
   string name = 2;
   string address = 3;
   string city = 4;
+  string country = 5;
 }
 
 message DeleteReportResponse {}
