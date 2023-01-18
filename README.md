@@ -1,5 +1,5 @@
 #### Overview
-Sample project to try buf to compile protobuf.
+Sample project to try buf to compile protobuffers.
 
 #### IMPORTANT
 - `release` branch should be an orphan branch.
