@@ -49,6 +49,7 @@ message MigrateReportRequest {
   string phone = 8;
   string description = 9;
   string long_description = 10;
+  string latitude = 11;
 }
 
 message DeleteReportResponse {}
