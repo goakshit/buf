@@ -4,8 +4,6 @@ on:
     workflows: [build-protobuf]
     types:
       - completed
-    push:
-      branches: ["main"]
 
 jobs:
   bump_version:

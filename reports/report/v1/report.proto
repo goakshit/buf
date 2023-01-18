@@ -44,6 +44,7 @@ message MigrateReportRequest {
   string address = 3;
   string city = 4;
   string country = 5;
+  string pin = 6;
 }
 
 message DeleteReportResponse {}
