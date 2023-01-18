@@ -9,8 +9,7 @@ on:
     paths:
       - '**.proto'
 
-permissions:
-  contents: write
+permissions: write-all
 
 jobs:
   build:
