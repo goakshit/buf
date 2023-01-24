@@ -77,8 +77,17 @@ jobs:
           gem build ruby.gemspec
 
       - name: release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{needs.tag.outputs.tag}}
-          files: |
-            gen/ruby/proto-${{needs.tag.outputs.version}}.gem
+        run: |
+          mkdir -p ~/.gem
+          touch ~/.gem/credentials
+          chmod 600 ~/.gem/credentials
+          echo ":github: Bearer ${{secrets.GITHUB_TOKEN}}" >> ~/.gem/credentials
+
+          gem push --key github --host "https://rubygems.pkg.github.com/goakshit"
+
+      # - name: release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: ${{needs.tag.outputs.tag}}
+      #     files: |
+      #       gen/ruby/proto-${{needs.tag.outputs.version}}.gem
