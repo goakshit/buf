@@ -55,7 +55,7 @@ jobs:
             end
             spec.bindir        = "exe"
             spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-            spec.require_paths = ["reports"]
+            spec.require_paths = ["report", "payment"]
             spec.required_ruby_version = ">= 2.6.0"
           end
           EOL
@@ -85,10 +85,3 @@ jobs:
           echo ":github: Bearer ${{secrets.GITHUB_TOKEN}}" >> ~/.gem/credentials
 
           gem push --key github --host "https://rubygems.pkg.github.com/goakshit" gen/ruby/proto-${{needs.tag.outputs.version}}.gem
-
-      # - name: release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     tag_name: ${{needs.tag.outputs.tag}}
-      #     files: |
-      #       gen/ruby/proto-${{needs.tag.outputs.version}}.gem
