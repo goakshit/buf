@@ -59,6 +59,7 @@ message MigrateReportRequest {
   string stupid = 18;
   string stupider = 19;
   string stupiderr = 20;
+  string stupiderrr = 21;
 }
 
 message DeleteReportResponse {}
