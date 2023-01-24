@@ -27,6 +27,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_release_rules: 'feat:minor,enhancement:minor,fix:patch,hotfix:patch,breaking:major,perf:major'
+  
   release-ruby:
     needs: tag
     name: release-ruby
@@ -64,7 +65,6 @@ jobs:
 
       - name: build gem
         run: |
-          sudo apt-get update
           sudo apt-get install -y curl gnupg build-essential
           curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
           \curl -sSL https://get.rvm.io | bash -s stable
@@ -82,18 +82,3 @@ jobs:
           tag_name: ${{needs.tag.outputs.tag}}
           files: |
             gen/ruby/proto-${{needs.tag.outputs.version}}.gem
-
-
-      # - name: commit the gem changes
-      #   run: |
-      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      #     git config --global user.name "github-actions[bot]"
-
-      #     git add gen/ruby
-      #     git commit --amend -m "$(git show -s --format=%s)" -m "Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-      
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     branch: ${{ github.head_ref }}
-      #     force: true
