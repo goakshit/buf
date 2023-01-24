@@ -79,6 +79,7 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{needs.tag.outputs.tag}}
           files: |
             gen/ruby/ruby-${{needs.tag.outputs.version}}.gem
 
