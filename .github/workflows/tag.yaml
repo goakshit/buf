@@ -38,8 +38,6 @@ jobs:
           ref: 'main'
       - name: create gemspec
         run: |
-          rm -f gen/ruby/ruby.gemspec
-          
           cat << 'EOL' > gen/ruby/ruby.gemspec
           Gem::Specification.new do |spec|
             spec.name          = "proto"
@@ -59,8 +57,6 @@ jobs:
           end
           EOL
 
-          rm -f gen/ruby/reports/report.pb
-          
           cat << 'EOL' > gen/ruby/reports/report.pb
           Dir["v1/*.rb"].each {|file| require file }
           EOL
