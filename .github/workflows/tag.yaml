@@ -36,13 +36,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{needs.tag-commit.outputs.version}}
+          ref: ${{needs.tag.outputs.version}}
       - name: create gemspec
         run: |
           cat << 'EOL' > gen/ruby/ruby.gemspec
           Gem::Specification.new do |spec|
             spec.name          = "proto"
-            spec.version       = "${{needs.tag-commit.outputs.version}}"
+            spec.version       = "${{needs.tag.outputs.version}}"
             spec.email         = ["akshitdhar@live.com"]
             spec.author        = "goakshit"
             spec.summary       = "Compiled protobuf files"
@@ -78,10 +78,9 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            ruby-${{needs.tag-commit.outputs.version}}.gem
+            gen/ruby/ruby-${{needs.tag.outputs.version}}.gem
 
 
       # - name: commit the gem changes
