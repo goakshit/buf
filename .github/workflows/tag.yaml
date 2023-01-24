@@ -81,7 +81,7 @@ jobs:
         with:
           tag_name: ${{needs.tag.outputs.tag}}
           files: |
-            gen/ruby/ruby-${{needs.tag.outputs.version}}.gem
+            gen/ruby/proto-${{needs.tag.outputs.version}}.gem
 
 
       # - name: commit the gem changes
