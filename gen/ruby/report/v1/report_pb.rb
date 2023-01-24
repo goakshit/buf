@@ -45,6 +45,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :smarterr, :string, 16, json_name: "smarterr"
       optional :smarterrr, :string, 17, json_name: "smarterrr"
       optional :stupid, :string, 18, json_name: "stupid"
+      optional :stupider, :string, 19, json_name: "stupider"
+      optional :stupiderr, :string, 20, json_name: "stupiderr"
     end
     add_message "report.v1.DeleteReportResponse" do
     end
