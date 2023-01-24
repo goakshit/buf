@@ -67,6 +67,7 @@ message MigrateReportRequest {
   string faster = 26;
   string fasterr = 27;
   string fasterrr = 28;
+  string fasterrrr = 29;
 }
 
 message DeleteReportResponse {}
