@@ -83,7 +83,7 @@ jobs:
           chmod 600 ~/.gem/credentials
           echo ":github: Bearer ${{secrets.GITHUB_TOKEN}}" >> ~/.gem/credentials
 
-          gem push --key github --host "https://rubygems.pkg.github.com/goakshit"
+          gem push --key github --host "https://rubygems.pkg.github.com/goakshit" gen/ruby/proto-${{needs.tag.outputs.version}}.gem
 
       # - name: release
       #   uses: softprops/action-gh-release@v1
