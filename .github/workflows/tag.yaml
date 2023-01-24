@@ -27,7 +27,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_release_rules: 'feat:minor,enhancement:minor,fix:patch,hotfix:patch,breaking:major,perf:major'
   release-ruby:
-    needs: tag-commit
+    needs: tag
     name: release-ruby
     runs-on: ubuntu-latest
     permissions:
