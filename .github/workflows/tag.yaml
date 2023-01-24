@@ -1,79 +1,102 @@
-name: bump-version
+name: tag
 on:
-  workflow_run:
-    workflows: [build-protobuf]
-    types:
-      - completed
+  push: 
+    branches: 
+      - 'main'
+    paths:
+      - '**.proto'
+
+permissions:
+  actions: write
+  contents: write
 
 jobs:
-  bump_version:
-    name: tag-release
+  tag:
+    name: tag-commit
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    outputs:
+      version: ${{ steps.tag_version.outputs.new_version }}
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: 'release'
+          ref: 'main'
       - name: bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
-          github_token: ${{ secrets.GIT_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_release_rules: 'feat:minor,enhancement:minor,fix:patch,hotfix:patch,breaking:major,perf:major'
   release-ruby:
-    needs: tag-release
+    needs: tag-commit
     name: release-ruby
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: write
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: 'release'
+          ref: 'main'
       - name: create gemspec
         run: |
-          cd gen/ruby
-          rm -f ruby.gemspec
+          rm -f gen/ruby/ruby.gemspec
           
-          cat << 'EOL' > ruby.gemspec
-          lib = File.expand_path("../schema", __FILE__)
-          $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+          cat << 'EOL' > gen/ruby/ruby.gemspec
           Gem::Specification.new do |spec|
             spec.name          = "proto"
-            spec.version       = "0.1.0"
-            spec.email         = ["platform.e@mondu.ai"]
-            spec.author        = "engineering@mondu"
+            spec.version       = "${{needs.tag-commit.outputs.version}}"
+            spec.email         = ["akshitdhar@live.com"]
+            spec.author        = "goakshit"
             spec.summary       = "Compiled protobuf files"
-            spec.homepage      = "https://github.com/mondu-ai/protobuf-schemas"
+            spec.homepage      = "https://github.com/goakshit/buf"
 
             spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
               `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
             end
             spec.bindir        = "exe"
             spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-            spec.require_paths = ["schema"]
+            spec.require_paths = ["reports"]
             spec.required_ruby_version = ">= 2.6.0"
           end
           EOL
 
-      - name: create ruby.pb
-        run: |
-          cd schema
-          rm -f ruby.pb
-          cat << 'EOL' > ruby.pb
+          rm -f gen/ruby/reports/report.pb
+          
+          cat << 'EOL' > gen/ruby/reports/report.pb
           Dir["v1/*.rb"].each {|file| require file }
           EOL
 
-      - name: commit the gem changes
+      - name: build gem
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+          sudo apt-get update
+          sudo apt-get install -y curl gnupg build-essential
+          curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
+          \curl -sSL https://get.rvm.io | bash -s stable
+          source ~/.rvm/scripts/rvm
 
-          git add gen/ruby
-          git commit --amend -m "$(git show -s --format=%s)" -m "Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-      
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+          rvm install ruby-3.1.1
+          rvm --default use ruby-3.1.1
+
+          cd gen/ruby
+          gem build ruby.gemspec
+
+      - name: release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          branch: ${{ github.head_ref }}
-          force: true
+          files: |
+            ruby-${{needs.tag-commit.outputs.version}}.gem
+
+
+      # - name: commit the gem changes
+      #   run: |
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git config --global user.name "github-actions[bot]"
+
+      #     git add gen/ruby
+      #     git commit --amend -m "$(git show -s --format=%s)" -m "Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+      
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     branch: ${{ github.head_ref }}
+      #     force: true
