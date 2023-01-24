@@ -53,6 +53,7 @@ message MigrateReportRequest {
   string long = 12;
   string longer = 13;
   string longerer = 14;
+  string smarter = 15;
 }
 
 message DeleteReportResponse {}

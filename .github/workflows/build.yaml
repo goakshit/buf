@@ -27,11 +27,11 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
-      # - name: ready the branch
-      #   run: |
-      #     git fetch origin release
-      #     git checkout origin/release
-      #     git merge --squash origin/main --allow-unrelated-histories
+      - name: ready the branch
+        run: |
+          git fetch origin release
+          git checkout origin/release
+          git merge --squash origin/main --allow-unrelated-histories
           
       - name: generate buf file
         run: |
@@ -58,26 +58,9 @@ jobs:
           git add -f .
           git commit --amend -m "$(git show -s --format=%s)" -m "Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
-      - name: "Temporarily disable 'include administrators' default branch protection"
-        id: disable_include_admins
-        uses: benjefferies/branch-protection-bot@master
-        if: always()
-        with:
-            access_token: ${{ secrets.GIT_TOKEN }}
-            branch: main
-            enforce_admins: false
-
       - name: Push generated files to release
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          branch: release
           force: true 
-
-      - name: "Restore 'include administrators' default branch protection"
-        uses: benjefferies/branch-protection-bot@master
-        if: always() # Force to always run this step to ensure "include administrators" is always turned back on
-        with:
-            access_token: ${{ secrets.GIT_TOKEN }}
-            branch: ${{ github.event.repository.default_branch }}
-            enforce_admins: ${{ steps.disable_include_admins.outputs.initial_status }}      
