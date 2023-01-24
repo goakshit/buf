@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{needs.tag.outputs.version}}
+          ref: ${{needs.tag.outputs.tag}}
       - name: create gemspec
         run: |
           cat << 'EOL' > gen/ruby/ruby.gemspec
