@@ -1,0 +1,15 @@
+name: lint
+on:
+  pull_request:
+    branches:
+      - "main"
+    paths-ignore:
+      - '**.proto'
+
+jobs:
+  build:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "No build required!"

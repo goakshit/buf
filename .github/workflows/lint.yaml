@@ -1,0 +1,85 @@
+name: lint
+on:
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - '**.proto'
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bufbuild/buf-setup-action@v1.12.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: bufbuild/buf-lint-action@v1
+      - name: verify if compiled code is pushed
+        run: |
+          if [ -z "$(ls -A gen)" ]; then
+            echo "Missing compiled files!"
+            exit 1
+          fi
+      - uses: bufbuild/buf-breaking-action@v1
+        with:
+          against: "https://github.com/goakshit/buf.git#branch=main"
+
+  generate-gem:
+    needs: lint
+    name: package-ruby
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: create gemspec
+        run: |
+          cd gen/ruby
+          rm -f ruby.gemspec
+          
+          cat << 'EOL' > ruby.gemspec
+          lib = File.expand_path("../schema", __FILE__)
+          $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+          Gem::Specification.new do |spec|
+            spec.name          = "proto"
+            spec.version       = "0.1.0"
+            spec.email         = ["platform.e@mondu.ai"]
+            spec.author        = "engineering@mondu"
+            spec.summary       = "Compiled protobuf files"
+            spec.homepage      = "https://github.com/mondu-ai/protobuf-schemas"
+
+            spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
+              `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+            end
+            spec.bindir        = "exe"
+            spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+            spec.require_paths = ["schema"]
+            spec.required_ruby_version = ">= 2.6.0"
+          end
+          EOL
+
+      - name: create ruby.pb
+        run: |
+          cd reports
+          rm -f ruby.pb
+          cat << 'EOL' > ruby.pb
+          Dir["v1/*.rb"].each {|file| require file }
+          EOL
+
+      - name: commit the gem changes
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          git add gen/ruby
+          git commit --amend -m "$(git show -s --format=%s)" -m "Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.head_ref }}
+          force: true
