@@ -58,18 +58,21 @@ jobs:
             end
             spec.bindir        = "exe"
             spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-            spec.require_paths = ["report", "payment"]
+            spec.require_paths = ["lib"]
             spec.required_ruby_version = ">= 2.6.0"
           end
           EOL
 
-          cat << 'EOL' > gen/ruby/report/proto.rb
+          mkdir gen/ruby/lib
+          mv payment/ report/ lib/
+
+          cat << 'EOL' > gen/ruby/lib/report/proto.rb
           Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "v1")) + "/**/*.rb"].each do |file|
             require file
           end
           EOL
           
-          cat << 'EOL' > gen/ruby/payment/proto.rb
+          cat << 'EOL' > gen/ruby/lib/payment/proto.rb
           Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "v1")) + "/**/*.rb"].each do |file|
             require file
           end
