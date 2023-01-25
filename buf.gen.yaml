@@ -11,16 +11,8 @@ plugins:
   - plugin: buf.build/protocolbuffers/go:v1.28.1
     out: gen/go
     opt: paths=source_relative
-  - plugin: buf.build/grpc/go
-    out: gen/go
-    opt: paths=source_relative
   - plugin: buf.build/protocolbuffers/ruby:v21.10
     out: gen/ruby
     opt: paths=source_relative
-  - plugin: buf.build/grpc/ruby
-    out: gen/ruby
-    opt: paths=source_relative
   - plugin: buf.build/protocolbuffers/python:v21.12
-    out: gen/python
-  - plugin: buf.build/grpc/python
     out: gen/python
