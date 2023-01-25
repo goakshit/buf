@@ -41,8 +41,7 @@ jobs:
           ref: ${{needs.tag.outputs.tag}}
       - name: create gemspec
         run: |
-          cd gen/ruby
-          cat << 'EOL' > proto.gemspec
+          cat << 'EOL' > gen/ruby/proto.gemspec
           Gem::Specification.new do |spec|
             spec.name          = "proto"
             spec.date          = Time.now.strftime('%Y-%m-%d')
@@ -64,13 +63,10 @@ jobs:
           end
           EOL
 
-          cd report
-          cat << 'EOL' > report.pb
+          cat << 'EOL' > gen/ruby/report/report.pb
           Dir["v1/*.rb"].each {|file| require file }
           EOL
 
-      - name: build gem
-        run: |
           sudo apt-get install -y curl gnupg build-essential
           curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
           \curl -sSL https://get.rvm.io | bash -s stable
