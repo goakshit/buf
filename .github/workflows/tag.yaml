@@ -41,7 +41,8 @@ jobs:
           ref: ${{needs.tag.outputs.tag}}
       - name: create gemspec
         run: |
-          cat << 'EOL' > gen/ruby/ruby.gemspec
+          cd gen/ruby
+          cat << 'EOL' > proto.gemspec
           Gem::Specification.new do |spec|
             spec.name          = "proto"
             spec.date          = Time.now.strftime('%Y-%m-%d')
@@ -63,7 +64,8 @@ jobs:
           end
           EOL
 
-          cat << 'EOL' > gen/ruby/report/report.pb
+          cd report
+          cat << 'EOL' > report.pb
           Dir["v1/*.rb"].each {|file| require file }
           EOL
 
