@@ -64,7 +64,13 @@ jobs:
           EOL
 
           cat << 'EOL' > gen/ruby/report/report.rb
-          Dir["v1/*.rb"].each {|file| require file }
+          require_relative "v1/report_pb"
+          require_relative "v1/report_services_pb"
+          EOL
+          
+          cat << 'EOL' > gen/ruby/payment/v1.rb
+          require_relative "v1/payment_pb"
+          require_relative "v1/payment_services_pb"
           EOL
 
           git add -f gen/ruby
@@ -79,12 +85,6 @@ jobs:
 
           cd gen/ruby
           gem build proto.gemspec
-
-          echo "PRINTING proto.gemspec"
-          cat proto.gemspec
-
-          echo "PRINTING report.pb"
-          cat report/report.rb
 
       - name: release
         run: |
