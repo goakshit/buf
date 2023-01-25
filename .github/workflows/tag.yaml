@@ -50,10 +50,8 @@ jobs:
             spec.author        = "goakshit"
             spec.summary       = "Compiled protobuf files"
 
-            spec.metadata = {
-              "github_repo"     => "https://github.com/goakshit/buf"
-              "source_code_uri" => "https://github.com/goakshit/buf"
-            } 
+            spec.metadata['github_repo']     = "https://github.com/goakshit/buf"
+            spec.metadata['source_code_uri'] = "https://github.com/goakshit/buf"
 
             spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
               `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
