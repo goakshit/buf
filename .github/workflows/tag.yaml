@@ -76,7 +76,7 @@ jobs:
           rvm --default use ruby-3.1.1
 
           cd gen/ruby
-          gem build ruby.gemspec
+          gem build proto.gemspec
 
       - name: release
         run: |
