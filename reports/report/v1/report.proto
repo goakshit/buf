@@ -84,9 +84,3 @@ message MigrateReportRequest {
 }
 
 message DeleteReportResponse {}
-
-service ReportService {
-  rpc GetReport(GetReportRequest) returns (GetReportResponse) {}
-  rpc PutReport(PutReportRequest) returns (PutReportResponse) {}
-  rpc DeleteReport(DeleteReportRequest) returns (DeleteReportResponse) {}
-}
