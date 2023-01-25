@@ -78,6 +78,12 @@ jobs:
           cd gen/ruby
           gem build proto.gemspec
 
+          echo "PRINTING proto.gemspec"
+          cat proto.gemspec
+
+          echo "PRINTING report.pb"
+          cat report/report.pb
+
       - name: release
         run: |
           mkdir -p ~/.gem
