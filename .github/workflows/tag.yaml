@@ -63,14 +63,16 @@ jobs:
           end
           EOL
 
-          cat << 'EOL' > gen/ruby/report/report.rb
-          require_relative "v1/report_pb"
-          require_relative "v1/report_services_pb"
+          cat << 'EOL' > gen/ruby/report/proto.rb
+          Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "v1")) + "/**/*.rb"].each do |file|
+            require file
+          end
           EOL
           
-          cat << 'EOL' > gen/ruby/payment/v1.rb
-          require_relative "v1/payment_pb"
-          require_relative "v1/payment_services_pb"
+          cat << 'EOL' > gen/ruby/payment/proto.rb
+          Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "v1")) + "/**/*.rb"].each do |file|
+            require file
+          end
           EOL
 
           git add -f gen/ruby
