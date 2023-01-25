@@ -87,6 +87,7 @@ message MigrateReportRequest {
   string test12 = 46;
   string test13 = 47;
   string test14 = 48;
+  string test15 = 49;
 }
 
 message DeleteReportResponse {}
