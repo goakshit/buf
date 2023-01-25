@@ -84,7 +84,7 @@ jobs:
           cat proto.gemspec
 
           echo "PRINTING report.pb"
-          cat report/report.pb
+          cat report/report.rb
 
       - name: release
         run: |
