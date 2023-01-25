@@ -69,6 +69,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :test6, :string, 40, json_name: "test6"
       optional :test7, :string, 41, json_name: "test7"
       optional :test8, :string, 42, json_name: "test8"
+      optional :test9, :string, 43, json_name: "test9"
     end
     add_message "report.v1.DeleteReportResponse" do
     end
