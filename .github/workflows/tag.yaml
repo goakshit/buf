@@ -63,6 +63,8 @@ jobs:
           end
           EOL
 
+      - name: create proto.rb
+        run: |
           cat << 'EOL' > gen/ruby/lib/proto.rb
           Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "payment/v1")) + "/**/*.rb"].each do |file|
             require file
@@ -71,11 +73,11 @@ jobs:
             require file
           end
           EOL
-
-          git add -f gen/ruby
       
       - name: build gem
         run: |
+          git add -f gen/ruby
+
           sudo apt-get install -y curl gnupg build-essential
           curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
           \curl -sSL https://get.rvm.io | bash -s stable
