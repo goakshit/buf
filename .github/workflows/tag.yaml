@@ -66,10 +66,8 @@ jobs:
       - name: create proto.rb
         run: |
           cat << 'EOL' > gen/ruby/lib/proto.rb
-          Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "payment/v1")) + "/**/*.rb"].each do |file|
-            require file
-          end
-          Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "report/v1")) + "/**/*.rb"].each do |file|
+          Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), ".")) + "/**/*.rb"].each do |file|
+            print file
             require file
           end
           EOL
