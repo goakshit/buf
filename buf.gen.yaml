@@ -12,7 +12,7 @@ plugins:
     out: gen/go
     opt: paths=source_relative
   - plugin: buf.build/protocolbuffers/ruby:v21.10
-    out: gen/ruby
+    out: gen/ruby/lib
     opt: paths=source_relative
   - plugin: buf.build/protocolbuffers/python:v21.12
     out: gen/python

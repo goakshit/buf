@@ -63,9 +63,6 @@ jobs:
           end
           EOL
 
-          mkdir gen/ruby/lib
-          mv gen/ruby/report/ gen/ruby/payment gen/ruby/lib/
-
           cat << 'EOL' > gen/ruby/lib/proto.rb
           Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), "payment/v1")) + "/**/*.rb"].each do |file|
             require file
