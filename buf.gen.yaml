@@ -15,4 +15,4 @@ plugins:
     out: gen/ruby/lib
     opt: paths=source_relative
   - plugin: buf.build/protocolbuffers/python:v21.12
-    out: gen/python
+    out: gen/python/proto
