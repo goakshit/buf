@@ -114,10 +114,7 @@ jobs:
         run: |
           cd gen/python/proto
 
-          # creates __init__.py files in every child directory
-          touch **/*(/e:REPLY+=/__init__.py:)
-
-          # Add import statements in every leaf __init__.py files
+          # Create __init__.py in every child and add import statements in every leaf __init__.py files
           for d in $(find . -type d | grep -v '^\.$'); do
           pushd $d
           subdircount=$(find . -maxdepth 1 -type d | wc -l)
@@ -130,6 +127,8 @@ jobs:
           __all__ = [ basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__init__.py')]
           from . import *
           EOL
+          else
+          touch __init__.py
           fi
           popd
           done
