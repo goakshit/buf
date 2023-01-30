@@ -164,7 +164,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          export CODEARTIFACT_REPOSITORY=mondu_pypi
+          export CODEARTIFACT_REPOSITORY=test_akshit
           export CODEARTIFACT_DOMAIN=artifact-stage-mondu-ai
           export CODEARTIFACT_OWNER=335270991587
 
