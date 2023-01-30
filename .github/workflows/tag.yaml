@@ -95,3 +95,85 @@ jobs:
           echo ":github: Bearer ${{secrets.GITHUB_TOKEN}}" >> ~/.gem/credentials
 
           gem push --key github --host "https://rubygems.pkg.github.com/goakshit" gen/ruby/proto-${{needs.tag.outputs.version}}.gem
+
+  release-python:
+    needs: tag
+    name: release-python
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{needs.tag.outputs.tag}}
+      - name: install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.2.0 python3 -
+
+      - name: create package files
+        run: |
+          cd gen/python/proto
+
+          # creates __init__.py files in every child directory
+          touch **/*(/e:REPLY+=/__init__.py:)
+
+          # Add import statements in every leaf __init__.py files
+          for d in $(find . -type d | grep -v '^\.$'); do
+          pushd $d
+          subdircount=$(find . -maxdepth 1 -type d | wc -l)
+          if [[ "$subdircount" -eq 1 ]]
+          then
+          cat << 'EOL' >> __init__.py
+          from os.path import dirname, basename, isfile, join
+          import glob
+          modules = glob.glob(join(dirname(__file__), '*.py'))
+          __all__ = [ basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__init__.py')]
+          from . import *
+          EOL
+          fi
+          popd
+          done
+
+      - name: build package
+        run: |
+          cd gen/python
+
+          # Initialize poetry package
+          poetry init -n
+
+          cat << 'EOL' >> pyproject.toml
+          [tool.poetry]
+          name = "proto"
+          version = "${{needs.tag.outputs.version}}"
+          description = "Compiled protobuf"
+          authors = ["goakshit <dharakshit@outlook.com>"]
+
+          [tool.poetry.dependencies]
+          python = "^3.10"
+          protobuf = "^3.10"
+
+          [build-system]
+          requires = ["poetry-core"]
+          build-backend = "poetry.core.masonry.api"
+          EOL
+
+          poetry install
+          poetry build
+
+      - name: publish package
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          export CODEARTIFACT_REPOSITORY=mondu_pypi
+          export CODEARTIFACT_DOMAIN=artifact-stage-mondu-ai
+          export CODEARTIFACT_OWNER=335270991587
+
+          export CODEARTIFACT_USER=aws
+          export CODEARTIFACT_REPOSITORY_URL=`aws codeartifact get-repository-endpoint --region eu-central-1 --domain ${CODEARTIFACT_DOMAIN} --domain-owner ${CODEARTIFACT_OWNER} --repository ${CODEARTIFACT_REPOSITORY} --format pypi --query repositoryEndpoint --output text`
+          export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --region eu-central-1 --domain ${CODEARTIFACT_DOMAIN}  --domain-owner ${CODEARTIFACT_OWNER} --query authorizationToken --output text`
+
+          poetry config repositories.aws_ca $CODEARTIFACT_REPOSITORY_URL
+          poetry config http-basic.aws_ca $CODEARTIFACT_USER $CODEARTIFACT_AUTH_TOKEN
+
+          poetry publish -r aws_ca
