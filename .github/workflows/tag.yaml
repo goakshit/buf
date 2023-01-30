@@ -140,7 +140,7 @@ jobs:
           # Initialize poetry package
           poetry init -n
 
-          cat << 'EOL' >> pyproject.toml
+          cat << 'EOL' > pyproject.toml
           [tool.poetry]
           name = "proto"
           version = "${{needs.tag.outputs.version}}"
