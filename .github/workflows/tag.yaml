@@ -169,8 +169,8 @@ jobs:
           export CODEARTIFACT_OWNER=335270991587
 
           export CODEARTIFACT_USER=aws
-          export CODEARTIFACT_REPOSITORY_URL=`aws codeartifact get-repository-endpoint --region eu-central-1 --profile stage --domain ${CODEARTIFACT_DOMAIN} --domain-owner ${CODEARTIFACT_OWNER} --repository ${CODEARTIFACT_REPOSITORY} --format pypi --query repositoryEndpoint --output text`
-          export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --region eu-central-1 --profile stage --domain ${CODEARTIFACT_DOMAIN}  --domain-owner ${CODEARTIFACT_OWNER} --query authorizationToken --output text`
+          export CODEARTIFACT_REPOSITORY_URL=`aws codeartifact get-repository-endpoint --region eu-central-1 --domain ${CODEARTIFACT_DOMAIN} --domain-owner ${CODEARTIFACT_OWNER} --repository ${CODEARTIFACT_REPOSITORY} --format pypi --query repositoryEndpoint --output text`
+          export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --region eu-central-1 --domain ${CODEARTIFACT_DOMAIN}  --domain-owner ${CODEARTIFACT_OWNER} --query authorizationToken --output text`
 
           poetry config repositories.aws_ca $CODEARTIFACT_REPOSITORY_URL
           poetry config http-basic.aws_ca $CODEARTIFACT_USER $CODEARTIFACT_AUTH_TOKEN
