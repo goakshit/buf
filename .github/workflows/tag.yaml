@@ -159,10 +159,15 @@ jobs:
           poetry install
           poetry build
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::335270991587:role/CrossAccountStageAdmin
+          aws-region: eu-central-1
+
       - name: publish package
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           export CODEARTIFACT_REPOSITORY=test_akshit
           export CODEARTIFACT_DOMAIN=artifact-stage-mondu-ai
