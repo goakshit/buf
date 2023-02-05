@@ -164,14 +164,14 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          role-to-assume: arn:aws:iam::335270991587:role/CrossAccountStageAdmin
+          role-to-assume: arn:aws:iam::XXXXXXXXXX:role/Admin
           aws-region: eu-central-1
 
       - name: publish package
         run: |
           export CODEARTIFACT_REPOSITORY=test_akshit
-          export CODEARTIFACT_DOMAIN=artifact-stage-mondu-ai
-          export CODEARTIFACT_OWNER=335270991587
+          export CODEARTIFACT_DOMAIN=artifacts
+          export CODEARTIFACT_OWNER=XXXXXXXXXX
 
           export CODEARTIFACT_USER=aws
           export CODEARTIFACT_REPOSITORY_URL=`aws codeartifact get-repository-endpoint --region eu-central-1 --domain ${CODEARTIFACT_DOMAIN} --domain-owner ${CODEARTIFACT_OWNER} --repository ${CODEARTIFACT_REPOSITORY} --format pypi --query repositoryEndpoint --output text`
