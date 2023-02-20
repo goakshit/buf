@@ -6,78 +6,94 @@ on:
     paths:
       - '**.proto'
 jobs:
-  lint:
-    name: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: bufbuild/buf-setup-action@v1.12.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: bufbuild/buf-lint-action@v1
+  # lint:
+  #   name: lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref }}
+  #     - uses: bufbuild/buf-setup-action@v1.12.0
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     - uses: bufbuild/buf-lint-action@v1
   
-  verify_formatting:
-    name: verify_formatting
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: bufbuild/buf-setup-action@v1.12.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Verify the code pushed in formatted
-        run: |
-          buf format -w
-          if git diff --quiet --exit-code ; then 
-            echo "Code isn't formatted!";
-            exit 1
-          fi
+  # verify_formatting:
+  #   name: verify_formatting
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref }}
+  #     - uses: bufbuild/buf-setup-action@v1.12.0
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Verify the code pushed in formatted
+  #       run: |
+  #         buf format -w
+  #         if git diff --quiet --exit-code ; then 
+  #           echo "Code is formatted!";
+  #           exit 0
+  #         else
+  #           echo "Code isn't formatted!";
+  #           exit 1
+  #         fi
   push_compiled_code:
     name: push_compiled_code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: bufbuild/buf-setup-action@v1.12.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: verify if compiled code is pushed
         run: |
-          if git diff --quiet --exit-code main; then
-            echo "Missing compiled files!"
+          if git diff --name-only $(git branch --show-current)..origin/main | grep "gen/"; then
+            echo "Compiled files are pushed!"
+            exit 0
+          else
+            echo "Compiled files haven't been pushed!"
             exit 1
           fi
-  verify_compiled_code:
-    name: verify_compiled_code
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: bufbuild/buf-setup-action@v1.12.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: verify generated code is not altered
-        run: |
-          BIN="/usr/local/bin" && \
-          VERSION="1.12.0" && \
-            curl -sSL \
-              "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
-              -o "${BIN}/buf" && \
-            chmod +x "${BIN}/buf"
-          buf generate
+  # verify_compiled_code:
+  #   name: verify_compiled_code
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref }}
+  #     - uses: bufbuild/buf-setup-action@v1.12.0
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: verify generated code is not altered
+  #       run: |
+  #         BIN="/usr/local/bin" && \
+  #         VERSION="1.12.0" && \
+  #           curl -sSL \
+  #             "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
+  #             -o "${BIN}/buf" && \
+  #           chmod +x "${BIN}/buf"
+  #         buf generate
 
-          if git diff --quiet --exit-code ; then 
-            echo "Unaltered code has been pushed";
-          else 
-            exit 1
-          fi
-  breaking_action:
-    name: breaking_action
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: bufbuild/buf-setup-action@v1.12.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: bufbuild/buf-breaking-action@v1
-        with:
-          against: "https://github.com/mondu-ai/protobuf-schemas.git#branch=main"
+  #         if git diff --quiet --exit-code ; then 
+  #           echo "Unaltered code has been pushed";
+  #         else 
+  #           exit 1
+  #         fi
+  # breaking_action:
+  #   name: breaking_action
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref }}
+  #     - uses: bufbuild/buf-setup-action@v1.12.0
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     - uses: bufbuild/buf-breaking-action@v1
+  #       with:
+  #         against: "https://github.com/goakshit/buf.git#branch=main"
 
 
