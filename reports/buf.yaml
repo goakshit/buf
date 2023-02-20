@@ -1,7 +1,7 @@
 version: v1
 breaking:
   use:
-    - FILE
+    - WIRE
 lint:
   allow_comment_ignores: true
   use:
