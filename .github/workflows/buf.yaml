@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
       - uses: bufbuild/buf-setup-action@v1.12.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -21,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
       - uses: bufbuild/buf-setup-action@v1.12.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -28,6 +32,9 @@ jobs:
         run: |
           buf format -w
           if git diff --quiet --exit-code ; then 
+            echo "Code is formatted!";
+            exit 0
+          else
             echo "Code isn't formatted!";
             exit 1
           fi
@@ -36,13 +43,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: bufbuild/buf-setup-action@v1.12.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: verify if compiled code is pushed
         run: |
-          if git diff --quiet --exit-code main; then
-            echo "Missing compiled files!"
+          # Check if new compiled code has been pushed
+          if git diff --name-only $(git branch --show-current)..origin/main | grep "gen/"; then
+            echo "Compiled files are pushed!"
+            exit 0
+          else
+            echo "Compiled files haven't been pushed!"
             exit 1
           fi
   verify_compiled_code:
@@ -50,6 +63,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
       - uses: bufbuild/buf-setup-action@v1.12.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -73,11 +88,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
       - uses: bufbuild/buf-setup-action@v1.12.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: bufbuild/buf-breaking-action@v1
         with:
-          against: "https://github.com/mondu-ai/protobuf-schemas.git#branch=main"
-
-
+          against: "https://github.com/goakshit/buf.git#branch=main"
