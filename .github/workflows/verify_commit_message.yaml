@@ -1,0 +1,31 @@
+name: Verify commit message
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  verify_commit_message:
+    name: verify_commit_message
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: $(git show -s --format=%s)
+          regex: '^(feat|enhancement|fix|hotfix|breaking|perf)\(.+\):.+$'
+      - name: verify message
+        run: |
+          echo ${{ steps.regex-match.outputs }}
+          
+          # if ${{ steps.regex-match.outputs.match == '' }}; then
+          #   echo "Commit message format is not correct. bleh!"
+          #   echo "The commit message should follow pattern described [here](https://mondu.atlassian.net/l/cp/ew7krE1V)."
+          #   exit 1
+          # else 
+          #   echo "Commit message format is correct! yay!"
+          # fi
