@@ -9,6 +9,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :report_type, :enum, 1, "report.v1.ReportType", json_name: "reportType"
       optional :report_id, :string, 2, json_name: "reportId"
       optional :name, :string, 3, json_name: "name"
+      optional :n1, :string, 4, json_name: "n1"
     end
     add_message "report.v1.GetReportRequest" do
       optional :report_id, :string, 1, json_name: "reportId"
