@@ -15,6 +15,7 @@ message Report {
   ReportType report_type = 1;
   string report_id = 2;
   string name = 3;
+  string n1 = 4;
 }
 
 message GetReportRequest {
