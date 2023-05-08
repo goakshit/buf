@@ -76,36 +76,48 @@ jobs:
               "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
               -o "${BIN}/buf" && \
             chmod +x "${BIN}/buf"
+          
+          buf generate -o verify_compiled_code
+          if diff -qr gen verify_compiled_code/gen ; then
+            echo "generated code is valid";
+          else 
+            echo "There seem to be some files missing generated files!";
+            exit 1
+          fi
+          
+          rm -rf verify_compiled_code/
           buf generate
           if git diff --quiet --exit-code ; then 
             echo "Unaltered code has been pushed";
           else 
+            echo "Code pushed seems to be altered";
             exit 1
           fi
-  verify_invalid_gen_code:
-    name: verify_invalid_gen_code
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-      - uses: bufbuild/buf-setup-action@v1.12.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: verify generated code doesn't contain unnecessary files
-        run: |
-          BIN="/usr/local/bin" && \
-          VERSION="1.12.0" && \
-            curl -sSL \
-              "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
-              -o "${BIN}/buf" && \
-            chmod +x "${BIN}/buf"       
-          buf generate -o test
-          if diff -qr gen test/gen ; then
-            echo "Unaltered code has been pushed";
-          else 
-            exit 1
-          fi
+  # verify_invalid_gen_code:
+  #   name: verify_invalid_gen_code
+  #   runs-on: ubuntu-latest
+  #   needs: push_compiled_code
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref }}
+  #     - uses: bufbuild/buf-setup-action@v1.12.0
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: verify generated code doesn't contain unnecessary files
+  #       run: |
+  #         BIN="/usr/local/bin" && \
+  #         VERSION="1.12.0" && \
+  #           curl -sSL \
+  #             "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
+  #             -o "${BIN}/buf" && \
+  #           chmod +x "${BIN}/buf"       
+  #         buf generate -o test
+  #         if diff -qr gen test/gen ; then
+  #           echo "generated code is valid";
+  #         else 
+  #           exit 1
+  #         fi
   breaking_action:
     name: breaking_action
     runs-on: ubuntu-latest
