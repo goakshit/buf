@@ -3,8 +3,6 @@ on:
   pull_request:
     branches:
       - "main"
-    paths:
-      - '**.proto'
 jobs:
   lint:
     name: lint
@@ -13,11 +11,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - uses: bufbuild/buf-setup-action@v1.12.0
+      - uses: bufbuild/buf-setup-action@v1.18.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: bufbuild/buf-lint-action@v1
-  
+
   verify_formatting:
     name: verify_formatting
     runs-on: ubuntu-latest
@@ -25,13 +23,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - uses: bufbuild/buf-setup-action@v1.12.0
+      - uses: bufbuild/buf-setup-action@v1.18.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify the code pushed in formatted
         run: |
           buf format -w
-          if git diff --quiet --exit-code ; then 
+          if git diff --quiet --exit-code ; then
             echo "Code is formatted!";
             exit 0
           else
@@ -45,13 +43,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - uses: bufbuild/buf-setup-action@v1.12.0
+      - uses: bufbuild/buf-setup-action@v1.18.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: verify generated code is not altered
         run: |
           BIN="/usr/local/bin" && \
-          VERSION="1.12.0" && \
+          VERSION="1.18.0" && \
             curl -sSL \
               "https://github.com/bufbuild/buf/releases/download/v${VERSION}/buf-$(uname -s)-$(uname -m)" \
               -o "${BIN}/buf" && \
@@ -64,8 +62,8 @@ jobs:
             echo "There seem to be some extra/missing generated files!";
             exit 1
           fi
-          
           rm -rf verify_compiled_code/
+          
           buf generate
           if git diff --quiet --exit-code ; then 
             echo "Unaltered code has been pushed";
@@ -80,7 +78,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - uses: bufbuild/buf-setup-action@v1.12.0
+      - uses: bufbuild/buf-setup-action@v1.18.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: bufbuild/buf-breaking-action@v1
