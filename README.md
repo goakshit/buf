@@ -17,5 +17,3 @@ git push origin release
 
 - Added Workflow for verifying buf linting, breaking change ... and so on.
 - `buf generate` command to generate files.
-
-#### Test
