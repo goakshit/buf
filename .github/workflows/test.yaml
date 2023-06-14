@@ -1,0 +1,21 @@
+name: test
+on:
+  pull_request:
+    branches:
+      - "main"
+jobs:
+  test:
+    name: test_events
+    runs-on: ubuntu-latest
+    permissions: read-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.PAT_REPO_ACCESS }}
+      - name: Run tests
+        run: |
+          echo "machine github.com login goakshit password ${{ secrets.PAT_REPO_ACCESS }}" > ~/.netrc
+          cd testing
+          go test ./...
+
