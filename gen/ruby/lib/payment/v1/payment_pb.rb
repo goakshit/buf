@@ -10,6 +10,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :payment_id, :string, 2, json_name: "paymentId"
       optional :name, :string, 3, json_name: "name"
     end
+    add_message "payment.v1.PaymentCopy" do
+      optional :payment_type, :enum, 1, "payment.v1.PaymentType", json_name: "paymentType"
+      optional :payment_id, :string, 2, json_name: "paymentId"
+      optional :name, :string, 3, json_name: "name"
+    end
     add_message "payment.v1.GetPaymentRequest" do
       optional :payment_id, :string, 1, json_name: "paymentId"
     end
@@ -41,6 +46,7 @@ end
 module Payment
   module V1
     Payment = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("payment.v1.Payment").msgclass
+    PaymentCopy = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("payment.v1.PaymentCopy").msgclass
     GetPaymentRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("payment.v1.GetPaymentRequest").msgclass
     GetPaymentResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("payment.v1.GetPaymentResponse").msgclass
     PutPaymentRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("payment.v1.PutPaymentRequest").msgclass

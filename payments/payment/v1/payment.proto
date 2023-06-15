@@ -17,6 +17,12 @@ message Payment {
   string name = 3;
 }
 
+message PaymentCopy {
+  PaymentType payment_type = 1;
+  string payment_id = 2;
+  string name = 3;
+}
+
 message GetPaymentRequest {
   string payment_id = 1;
 }

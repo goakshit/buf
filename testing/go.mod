@@ -8,3 +8,5 @@ require (
 )
 
 require github.com/goakshit/greymatter v0.1.0
+
+replace github.com/goakshit/buf => ../
