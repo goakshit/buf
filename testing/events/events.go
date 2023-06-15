@@ -8,5 +8,6 @@ import (
 var (
 	Events = []proto.Message{
 		&paymentv1.Payment{},
+		&paymentv1.PaymentCopy{},
 	}
 )
